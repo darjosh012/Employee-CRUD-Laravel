@@ -16,7 +16,7 @@ class UserCheck
      */
     public function handle($request, Closure $next)
     {
-        if ($request->user()) {
+        if (!$request->user()) {
             return new Response(view('pages.unauthorized'));
         }
         return $next($request);

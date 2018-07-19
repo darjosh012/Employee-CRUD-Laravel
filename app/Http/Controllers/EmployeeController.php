@@ -3,17 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Employee;
+use Auth;
 use Illuminate\Http\Request;
 
 class EmployeeController extends Controller
 {
-    public function __construct(){
-        $this->middleware('auth');
-    }
+//    public function __construct(){
+//        $this->middleware('user.check');
+//    }
     public function index()
     {
         $employees=Employee::all();
-        return view('pages.index', compact('employees'));
+        $currentUser = Auth::user()->nickname;
+        return view('pages.index', compact('employees', 'currentUser'));
     } 
     public function getEmp()
     {
@@ -38,13 +40,13 @@ class EmployeeController extends Controller
         $employee->name = $request->name;
         $employee->department = $request->department;
         $employee->position = $request->position;
-
         $employee->save();
+        
         return response()->json(['success' => 'data is successful added']);
     }
     public function show($id)
     {
-        $employee = new Employee();
+        //$employee = new Employee();
     }
 
     public function edit(Request $request)
@@ -65,7 +67,7 @@ class EmployeeController extends Controller
 
     public function destroy(Request $request)
     {
-        Employee::where('employeeid', $request->employee_id)->delete();
+        Employee::where('employee_id', $request->employee_id)->delete();
         return response ()->json(['success'=> 'done' ]);
     }
  

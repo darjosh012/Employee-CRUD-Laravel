@@ -1,13 +1,16 @@
 @extends('layouts.app')
 @section('content')
-  
+<main class="py-4">
    <meta name="_token" content="{{csrf_token()}}" />
+   
    <div class="container">
+     <!------------- Toast -------------->
       <div class="alert alert-info float-center">
-          <p>I'm alert</p>
+          <p><h4>Welcome, {{$currentUser}}!</h4></p>
       </div>
-       <h1 class="display-4">Employees</h1>
-       <button type="button" data-toggle="modal" data-target="#addEmployeeModal" class="btn btn primary float-right">Add Employee</button>
+      
+       <h1 class="display-4">List of Employees</h1>
+       <button type="button" data-toggle="modal" data-target="#addEmployeeModal" class="btn btn-primary float-right">Add Employee</button>
        <div class="table-container">
        @include('pages.employeesTable')
        </div>
@@ -17,13 +20,14 @@
 <div class="modal fade" id="addEmployeeModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
-      <div class="modal-header">
+      <div class="modal-header" style="background-color: #007bff">
         <h5 class="modal-title" id="exampleModalLabel">Add Employee</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
+      <form>
        <div class="form-group">
               <label for="name">Employee Name:</label>
               <input type="text" class="form-control" id="addName">
@@ -35,11 +39,13 @@
             <div class="form-group">
                <label for="price">Position:</label>
                <input type="text" class="form-control" id="addPosition">
-             </div>    
+             </div>   
           <div class="modal-footer">
             <button class="btn btn-primary" id="addEmployeeSubmit">Submit</button>
+
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
           </div>
+      
           </div>
     </div>
   </div>
@@ -47,11 +53,11 @@
 </div>
    
     <!---------------- Edit Employee Modal ----------------->
-    <input id="editEmpID" type ="hidden" value="">
+<input id="editEmpID" type ="hidden" value="">
 <div class="modal fade" id="editEmployeeModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
-      <div class="modal-header">
+      <div class="modal-header" style="background-color: #e0a800;">
         <h5 class="modal-title" id="exampleModalLabel">Edit Employee</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
@@ -70,21 +76,23 @@
                <label for="price">Position:</label>
                <input type="text" class="form-control" id="editPosition">
              </div>
-            <button class="btn btn-primary" id="editSubmit">Submit</button>
           <div class="modal-footer">
+           <button class="btn btn-primary" id="editSubmit">Submit</button>
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
           </div>
     </div>
   </div>
 </div>
 </div>
+</main>
 <script>
+    //=========== Variables ==========//
     var empName;
     var department;
     var position;
     
     //=========== Animation toast ==========//
-    $(".alert").delay(3000).slideUp(500, function() {
+    $(".alert").delay(4000).slideUp(500, function() {
     $(this).alert('close');
 });
     //======= Getting data from button to Edit Modal ========//
@@ -111,15 +119,18 @@
                 url: "{{ url('/employees/store') }}",
                 method: 'POST',
                 data: {
-                    name: jQuery('input[id="name"]').val(),
-                    department: jQuery('input[id="department"]').val(),
-                    position: jQuery('input[id="position"]').val()           
+                    name: jQuery('input[id="addName"]').val(),
+                    department: jQuery('input[id="addDepartment"]').val(),
+                    position: jQuery('input[id="addPosition"]').val()           
                 },
                 success:function (result) {   
                     console.log("true");
                     $('div.table-container').fadeOut();
                     $('div.table-container').load('{{url('employees/table')}}', function() {$('div.table-container').fadeIn();});
                     $('#addEmployeeModal').modal('toggle')
+                },
+            error:function (result){
+                    alert('Please enter the fields below');
                 }});
         });
     });
@@ -152,7 +163,11 @@
                     $('div.table-container').fadeOut();
                     $('div.table-container').load('{{url('employees/table')}}', function() {$('div.table-container').fadeIn();});
                     $('#editEmployeeModal').modal('hide')
-                }});
+                },
+                error:function (result){
+                    alert('Please enter the fields below');
+               }
+            });
         });
     });
     //=========== For Deleting Employeee ============//

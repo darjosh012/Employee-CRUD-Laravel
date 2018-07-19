@@ -3,6 +3,7 @@
 
 <meta name="_token" content="{{csrf_token()}}" />
 <div class="container">
+ <div class="jumbotron">
   <h1 class="display-4">Login to Portal</h1>
 <!--
         {{Form::open(array('url' => 'pages.login'))}}
@@ -25,6 +26,7 @@
        <input type="password" class="form-control" placeholder="Password" id="password" required>
    </div>
    <button type="submit" class="btn btn-primary float-right" id="loginButton">Login</button>
+</div>
 </div>
 <script>
     $(document).ready(function (){

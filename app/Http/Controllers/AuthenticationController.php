@@ -10,7 +10,15 @@ use Log;
 class AuthenticationController extends Controller
 {
     public function loginIndex() {
-        return view('pages.login');
+        if (Auth::check()){
+             return Redirect::to('employees');
+        } else {
+             return view('pages.login');
+        }
+       
+    }
+    public function landing() {
+        return view ('pages.landing');
     }
     public function loginProcess(Request $request) {
         $userdata = array (
