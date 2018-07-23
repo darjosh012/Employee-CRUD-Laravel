@@ -26,6 +26,8 @@
                 <a class="navbar-brand" href="{{ url('/employees') }}">
                     Company Portal
                 </a>
+                <a class="text-warning navbar-text" href="{{url('employees')}}">Employees |</a> &nbsp;
+                <a class="text-warning navbar-text" href="{{url('users')}}">Users</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -34,6 +36,7 @@
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav ml-auto">
                       @if(Auth::Check())
+                      <p class="text-primary">Hi, <strong>{{Auth::user()->nickname}}</strong>&nbsp; &nbsp;</p>
                        <a class="btn btn-secondary" href="{{url('logout')}}">Logout</a>
                        @else
                        <a class="btn btn-secondary" href="{{url('login')}}">Login</a>

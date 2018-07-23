@@ -8,11 +8,10 @@
       <div class="alert alert-info float-center">
           <p><h4>Welcome, {{$currentUser}}!</h4></p>
       </div>
-      
-       <h1 class="display-4">List of Employees</h1>
        <button type="button" data-toggle="modal" data-target="#addEmployeeModal" class="btn btn-primary float-right">Add Employee</button>
+       <h1 class="display-4">List of Employees</h1>
        <div class="table-container">
-       @include('pages.employeesTable')
+           @include('pages.employeesTable')
        </div>
     </div>
     

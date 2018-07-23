@@ -25,4 +25,10 @@ Route::group (['middleware' => 'user.check'], function(){
     Route::get('/employees/table', 'EmployeeController@getEmp');
 
     Route::resource('employees', 'EmployeeController');
+    
+    Route::get('users', 'UsersController@index');
+    Route::get('users/table', 'UsersController@userFetchTable');
+    Route::post('users/store', 'UsersController@store');
+    Route::delete('users/destroy', 'UsersController@destroy');
+    Route::post('users/update', 'UsersController@update');
 });

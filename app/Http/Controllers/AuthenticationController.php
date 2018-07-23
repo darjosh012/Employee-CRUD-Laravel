@@ -34,7 +34,6 @@ class AuthenticationController extends Controller
     }
     public function logout() {
         Auth::logout();
-        Log::debug('test');
         return Redirect::to('login');
     }
 }

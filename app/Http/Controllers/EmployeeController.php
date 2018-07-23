@@ -44,16 +44,6 @@ class EmployeeController extends Controller
         
         return response()->json(['success' => 'data is successful added']);
     }
-    public function show($id)
-    {
-        //$employee = new Employee();
-    }
-
-    public function edit(Request $request)
-    {
-        
-    }
-
     public function update(Request $request)
     {
         $employee = Employee::find($request->id);
