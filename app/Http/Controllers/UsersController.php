@@ -20,6 +20,12 @@ class UsersController extends Controller
         return view ('pages.usersTable', compact('users'));
     }
     public function store(Request $request) {
+        $validation = $request->validate([
+            'name' => 'required|max:255',
+            'nickname' => 'required|min:2',
+            'email' => 'required|email',
+            'password' => 'required|min:8',
+        ]);
         $user = new User();
         $user->name = $request->name;
         $user->nickname= $request->nickname;

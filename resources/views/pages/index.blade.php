@@ -5,7 +5,7 @@
    
    <div class="container">
      <!------------- Toast -------------->
-      <div class="alert alert-info float-center">
+      <div class="alert alert-info float-center welcome">
           <p><h4>Welcome, {{$currentUser}}!</h4></p>
       </div>
        <button type="button" data-toggle="modal" data-target="#addEmployeeModal" class="btn btn-primary float-right">Add Employee</button>
@@ -26,6 +26,13 @@
         </button>
       </div>
       <div class="modal-body">
+      <div class="alert alert-danger dangerAdd" style="display:none">
+            <ul>
+                @foreach($errors->all() as $error)
+                <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
       <form>
        <div class="form-group">
               <label for="name">Employee Name:</label>
@@ -50,7 +57,6 @@
   </div>
 </div>
 </div>
-   
     <!---------------- Edit Employee Modal ----------------->
 <input id="editEmpID" type ="hidden" value="">
 <div class="modal fade" id="editEmployeeModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -63,6 +69,13 @@
         </button>
       </div>
       <div class="modal-body">
+        <div class="alert alert-danger dangerEdit" style="display:none">
+            <ul>
+                @foreach($errors->all() as $error)
+                <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
        <div class="form-group">
               <label for="name">Employee Name:</label>
               <input type="text" class="form-control" id="editName">
@@ -91,7 +104,7 @@
     var position;
     
     //=========== Animation toast ==========//
-    $(".alert").delay(4000).slideUp(500, function() {
+    $(".welcome").delay(4000).slideUp(500, function() {
     $(this).alert('close');
 });
     //======= Getting data from button to Edit Modal ========//
@@ -122,14 +135,21 @@
                     department: jQuery('input[id="addDepartment"]').val(),
                     position: jQuery('input[id="addPosition"]').val()           
                 },
-                success:function (result) {   
+                success:function (request) {   
                     console.log("true");
                     $('div.table-container').fadeOut();
                     $('div.table-container').load('{{url('employees/table')}}', function() {$('div.table-container').fadeIn();});
                     $('#addEmployeeModal').modal('toggle')
+                               
                 },
-            error:function (result){
-                    alert('Please enter the fields below');
+            error:function (request, status, error){
+                    $('.dangerAdd').text('')
+                    json = $.parseJSON(request.responseText)
+                    $.each(json.errors, function(key, value) {
+                        $('.dangerAdd').show()
+                        $('.dangerAdd').append('<p>' + value + '</p>')
+                    })
+                    $('.dangerAdd').delay(3000).fadeOut(800)
                 }});
         });
     });
@@ -163,8 +183,14 @@
                     $('div.table-container').load('{{url('employees/table')}}', function() {$('div.table-container').fadeIn();});
                     $('#editEmployeeModal').modal('hide')
                 },
-                error:function (result){
-                    alert('Please enter the fields below');
+                error:function (request, status, error){
+                    $('.dangerEdit').text('')
+                    json = $.parseJSON(request.responseText)
+                    $.each(json.errors, function(key, value) {
+                        $('.dangerEdit').show()
+                        $('.dangerEdit').append('<p>' + value + '</p>')
+                    })
+                    $('.dangerEdit').delay(3000).fadeOut(800)
                }
             });
         });

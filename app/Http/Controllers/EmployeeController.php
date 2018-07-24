@@ -36,6 +36,11 @@ class EmployeeController extends Controller
 
     public function store(Request $request)
     {
+        $validator = $request->validate([
+            'name' => 'required|max:255',
+            'department' => 'required|max:255',
+            'position' => 'required|max:255'
+        ]);
        $employee = new Employee();
         $employee->name = $request->name;
         $employee->department = $request->department;
@@ -46,6 +51,12 @@ class EmployeeController extends Controller
     }
     public function update(Request $request)
     {
+        $validator = $request->validate([
+            'name' => 'required|max:255',
+            'department' => 'required|max:255',
+            'position' => 'required|max:255'
+        ]);
+        
         $employee = Employee::find($request->id);
         $employee->name = $request->name;
         $employee->department = $request->department;

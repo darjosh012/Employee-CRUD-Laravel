@@ -22,6 +22,13 @@
         </button>
       </div>
       <div class="modal-body">
+      <div class="alert alert-danger dangerAdd" style="display:none">
+                  <ul class="edit-alert">
+                      @foreach($errors->all() as $error)
+                          <li>{{ $error }}</li>
+                      @endforeach
+                  </ul>
+              </div>
       <form>
        <div class="form-group">
               <label for="name">Name:</label>
@@ -65,7 +72,7 @@
       </div>    
       <div class="modal-body">
              <input type="hidden" id="userIdEdit" value="">
-              <div class="alert alert-danger" style="display:none">
+              <div class="alert alert-danger dangerEdit" style="display:none">
                   <ul class="edit-alert">
                       @foreach($errors->all() as $error)
                           <li>{{ $error }}</li>
@@ -106,6 +113,8 @@
     //================ Add user ============== /
     $(document).ready(function(){
         $(document).on('click', '#addUserSubmit', function (e) {
+            $('.dangerAdd').text('')
+            $('.dangerAdd').hide('')
             if ($("#addPassword").val() != $("#addConfirmPassword").val() ) {
                 alert('not match')
                 console.log('wrong')
@@ -128,11 +137,28 @@
                     console.log('Saved')
                     $('#usersTable').load('{{url('users/table')}}', function (){$('#usersTable').fadeIn()})
                     $('#addUserModal').modal('toggle');
-                }
+                },
+                error:function (request, status, error){
+                            $('.dangerAdd').text('')
+                            json =$.parseJSON(request.responseText);
+                            $.each(json.errors, function(key, value){
+                                $('.dangerAdd').show()
+                                $('.dangerAdd').append('<p>' + value + '</p>')
+                            })
+                            $('.dangerAdd').delay(3000).fadeOut(800)
+                            }  
             })
         })
    })
-    
+// ============= Clear alert modals when closed ==============//
+    $('#addUserModal').on('hide.bs.modal', function(e) {
+        $('.dangerAdd').text('')
+        $('.dangerAdd').hide('')
+    })
+    $('#editUserModal').on('hide.bs.modal', function(e) {
+        $('.dangerEdit').text('')
+        $('.dangerEdit').hide('')
+    })
 //================== Edit User ================//
     $(document).ready(function (){
         $(document).on('click', '.editUser', function (e){
@@ -166,11 +192,14 @@
                             $('#editUserModal').modal('toggle');
                         },
                         error:function (request, status, error){
+                            $('.dangerEdit').text('')
                             json =$.parseJSON(request.responseText);
                             $.each(json.errors, function(key, value){
-                                $('.alert-danger').show()
-                                $('.alert-danger').append('<p>' + value + '</p>')
+                                $('.dangerEdit').show()
+                                $('.dangerEdit').append('<p>' + value + '</p>')
+                                
                             })
+                            $('.dangerEdit').delay(3000).fadeOut(800)
                             }       
         })
         })
