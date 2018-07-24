@@ -41,7 +41,7 @@ class UsersController extends Controller
             'name' => 'required|max:255',
             'nickname' => 'required|max:255',
             'email' => 'required|unique:users,email,'. $request->id .'|email',
-            'currentPassword' => 'required|old_password: '. User::find($request->id)->password,
+            'currentPassword' => 'required|oldPasswordCheck: '. User::find($request->id)->password,
             'newPassword' => 'required|min:8',
         ]);
 

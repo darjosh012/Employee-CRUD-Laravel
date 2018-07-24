@@ -16,11 +16,14 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-       Validator::extend('old_password', function ($attribute, $value, $parameters, $validator) {
-           Log::emergency($value .'  '. current($parameters));
-            return Hash::check($value, current($parameters));
-
-});
+       Validator::extend('oldPasswordCheck', function ($attribute, $value, $parameters, $validator) {
+           $hashedPass = current($parameters);
+          if (Hash::check($value, str_replace(' ', '', $hashedPass)))
+            return true;
+          else {
+            return false;
+          }
+}, 'Wrong current password!');
     }
 
     /**
